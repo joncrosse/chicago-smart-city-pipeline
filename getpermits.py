@@ -3,10 +3,29 @@ import requests
 import json
 from datetime import datetime
 from google.cloud import storage
+import yaml
+
+def load_config():
+    if os.path.exists("config.yaml"):
+        with open("config.yaml", "r") as f:
+         return yaml.safe_load(f)
+
+    else:
+        return{
+            'gcp': {
+                'project_id': os.environ.get('GCP_PROJECT_ID'),
+                'bucket_name': os.environ.get('GCP_BUCKET_NAME')
+            },
+            'cta':{
+                'api_key': os.environ.get('API_KEY')
+            }
+        }
+
+my_config = load_config()
 
 API_URL = "https://data.cityofchicago.org/resource/pubx-yq2d.json"
-PROJECT_ID = "project-2074846a-2a76-442f-b1f"
-BUCKET_NAME = "cdot_data_lake_8751"
+PROJECT_ID = my_config['gcp']['project_id']
+BUCKET_NAME = my_config['gcp']['bucket_name']
 
 def fetch_chicago_permits():
     

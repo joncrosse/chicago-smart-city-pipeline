@@ -7,10 +7,20 @@ from google.cloud import storage
 import yaml
 
 def load_config():
-    with open("config.yaml", "r") as f:
-        config = yaml.safe_load(f)
+    if os.path.exists("config.yaml"):
+        with open("config.yaml", "r") as f:
+         return yaml.safe_load(f)
 
-    return config
+    else:
+        return{
+            'gcp': {
+                'project_id': os.environ.get('GCP_PROJECT_ID'),
+                'bucket_name': os.environ.get('GCP_BUCKET_NAME')
+            },
+            'cta':{
+                'api_key': os.environ.get('API_KEY')
+            }
+        }
 
 my_config = load_config()
 

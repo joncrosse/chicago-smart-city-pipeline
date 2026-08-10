@@ -1,0 +1,43 @@
+name: Run Chicago smart city pipeline
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: 
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  run-ingestion:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actiosn/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install google-cloud-storage- request pyyaml
+
+    - name: Authenticate to google cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{secrets.GCP_WORKLOAD_PROVIDER}}
+        service_account: traffic-pipeline-ingestor@project-2074846a-2a76-442f-b1f.iam.gserviceaccount.com
+
+    - name: Execute ingestion scripts
+      env:
+        GCP_PROJECT_ID: ${{secrets.GCP_PROJECT_ID}}
+        GCP_BUCKET_NAME: ${{secrets.GCP_BUCKET_NAME}}
+        CTA_API_KEY: ${{secrets.CTA_API_KEY}}
+      run: |
+        python ingest_cta_trains.py
+        python getpermits.py
