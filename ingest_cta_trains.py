@@ -4,10 +4,20 @@ import requests
 import json
 from datetime import datetime
 from google.cloud import storage
+import yaml
 
-API_KEY = "config"
-PROJECT_ID = "config"
-BUCKET_NAME = "config"
+def load_config():
+    with open("config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
+    return config
+
+my_config = load_config()
+
+API_KEY = my_config['cta']['api_key']
+PROJECT_ID = my_config['gcp']['project_id']
+BUCKET_NAME = my_config['gcp']['bucket_name']
+
 
 def fetch_cta_trains():
 
