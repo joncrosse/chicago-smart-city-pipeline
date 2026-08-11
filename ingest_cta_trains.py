@@ -18,7 +18,7 @@ def load_config():
                 'bucket_name': os.environ.get('GCP_BUCKET_NAME')
             },
             'cta':{
-                'api_key': os.environ.get('API_KEY')
+                'api_key': os.environ.get('CTA_API_KEY')
             }
         }
 
