@@ -41,3 +41,8 @@ jobs:
       run: |
         python ingest_cta_trains.py
         python getpermits.py
+
+    - name: Debug secret length
+      run: echo "Length is ${#SECRET}"
+      env:
+        SECRET: ${{ secrets.GCP_WORKLOAD_PROVIDER }}
