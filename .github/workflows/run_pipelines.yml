@@ -27,6 +27,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install google-cloud-storage requests pyyaml
 
+    - name: Debug secret length
+      run: echo "Length is ${#SECRET}"
+      env:
+        SECRET: ${{ secrets.GCP_WORKLOAD_PROVIDER }}
+
     - name: Authenticate to google cloud
       uses: google-github-actions/auth@v2
       with:
@@ -42,7 +47,3 @@ jobs:
         python ingest_cta_trains.py
         python getpermits.py
 
-    - name: Debug secret length
-      run: echo "Length is ${#SECRET}"
-      env:
-        SECRET: ${{ secrets.GCP_WORKLOAD_PROVIDER }}
