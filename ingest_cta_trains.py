@@ -47,7 +47,10 @@ def fetch_cta_trains():
 
         raw_data = response.json()
 
-        print(f"Successfully retrieved {len(raw_data['ctatt']['route'])} train routes.")
+        ctatt_data = raw_data.get("ctatt", {})
+        routes_list = ctatt_data.get("route", [])
+
+        print(f"Successfully retrieved {len(routes_list)} train routes.")
 
         os.makedirs("data/raw/cta_trains/test_trains", exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
